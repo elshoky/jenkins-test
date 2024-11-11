@@ -10,8 +10,8 @@ pipeline {
         stage('Run Script') {
             steps {
                 script {
-                     'chmod +x /mnt/data/hello.sh'
-                     '/mnt/data/hello.sh'
+                    sh 'chmod +x /mnt/data/hello.sh'
+                    sh '/mnt/data/hello.sh'
                 }
             }
         }
