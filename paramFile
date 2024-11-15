@@ -1,19 +1,37 @@
 pipeline {
     agent any
     parameters {
-        booleanParam(name: 'project', defaultValue: false, description: 'Select project environment')
-        choice(name: 'environment', choices: ['dev', 'prod', 'stage'], description: 'Choose the environment')
+        booleanParam(name: 'project', defaultValue: false, description: 'Enable project execution')
+        choice(name: 'environment', choices: ['dev', 'prod', 'stage'], description: 'Select the environment')
     }
     stages {
-        stage('Example') {
+        stage('Dev Stage') {
+            when {
+                expression { params.project && params.environment == 'dev' }
+            }
             steps {
-                script {
-                    if (params.project) {
-                        echo "Project is selected with environment: ${params.environment}"
-                    } else {
-                        echo "Project is not selected."
-                    }
-                }
+                echo "Executing Dev Stage..."
+                // Add tasks specific to the 'dev' environment here
+            }
+        }
+
+        stage('Prod Stage') {
+            when {
+                expression { params.project && params.environment == 'prod' }
+            }
+            steps {
+                echo "Executing Prod Stage..."
+                // Add tasks specific to the 'prod' environment here
+            }
+        }
+
+        stage('Stage Environment') {
+            when {
+                expression { params.project && params.environment == 'stage' }
+            }
+            steps {
+                echo "Executing Stage Environment..."
+                // Add tasks specific to the 'stage' environment here
             }
         }
     }
