@@ -1,0 +1,20 @@
+pipeline {
+    agent any
+    parameters {
+        booleanParam(name: 'project', defaultValue: false, description: 'Select project environment')
+        choice(name: 'environment', choices: ['dev', 'prod', 'stage'], description: 'Choose the environment')
+    }
+    stages {
+        stage('Example') {
+            steps {
+                script {
+                    if (params.project) {
+                        echo "Project is selected with environment: ${params.environment}"
+                    } else {
+                        echo "Project is not selected."
+                    }
+                }
+            }
+        }
+    }
+}
