@@ -1,0 +1,30 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Parallel Stages') {
+            parallel {
+                stage('stage1') {
+                    steps {
+                        echo 'Executing Stage 1'
+                        // Add any tasks specific to stage1 here
+                    }
+                }
+                
+                stage('stage2') {
+                    steps {
+                        echo 'Executing Stage 2'
+                        // Add any tasks specific to stage2 here
+                    }
+                }
+                
+                stage('stage3') {
+                    steps {
+                        echo 'Executing Stage 3'
+                        // Add any tasks specific to stage3 here
+                    }
+                }
+            }
+        }
+    }
+}
