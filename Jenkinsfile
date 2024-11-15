@@ -21,7 +21,7 @@ pipeline {
             steps {
                 script {
                     // Build Docker image with the specified name and build number
-                    sh 'docker build -t elshoky/app:$BUILD_NUMBER .'
+                    sh 'docker build . -t elshoky/app:$BUILD_NUMBER '
                 }
             }
         }
