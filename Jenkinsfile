@@ -4,14 +4,16 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/elshoky/jenkins-test.git'
+                // Checkout the current branch automatically in a multibranch pipeline
+                checkout scm
             }
-        
+        }
 
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh 'docker build -t elshoky/app:$BUILD_NUMBER .'
+                    // Build the Docker image with the build number
+                    sh 'docker build -t elshoky/app:${env.BUILD_NUMBER} .'
                 }
             }
         }
@@ -20,6 +22,7 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'docker-credentials', usernameVariable: 'USER', passwordVariable: 'PASSWORD')]) {
                     script {
+                        // Login to Docker Hub
                         sh 'echo "$PASSWORD" | docker login -u "$USER" --password-stdin'
                     }
                 }
@@ -29,12 +32,13 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    sh 'docker push elshoky/app:$BUILD_NUMBER'
+                    // Push the Docker image to the registry
+                    sh 'docker push elshoky/app:${env.BUILD_NUMBER}'
                 }
             }
         }
     }
-    
+
     post {
         success {
             echo 'Pipeline completed successfully!'
