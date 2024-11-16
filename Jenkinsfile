@@ -1,55 +1,30 @@
 pipeline {
     agent any
-
     stages {
-        stage('Checkout Code') {
+        stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/elshoky/jenkins-test.git'
+                // Checkout the current branch
+                checkout scm
             }
         }
-        
         stage('Run Script') {
             steps {
                 script {
-                    sh 'chmod +x ./hello.sh'
+                    // Execute the hello.sh script
                     sh './hello.sh'
                 }
             }
         }
-
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    sh 'docker build -t elshoky/app:$BUILD_NUMBER .'
-                }
-            }
-        }
-
-        stage('Docker Login') {
-            steps {
-                withCredentials([usernamePassword(credentialsId: 'docker-credentials', usernameVariable: 'USER', passwordVariable: 'PASSWORD')]) {
-                    script {
-                        sh 'echo "$PASSWORD" | docker login -u "$USER" --password-stdin'
-                    }
-                }
-            }
-        }
-
-        stage('Push Docker Image') {
-            steps {
-                script {
-                    sh 'docker push elshoky/app:$BUILD_NUMBER'
-                }
-            }
-        }
     }
-    
     post {
+        always {
+            echo "Pipeline execution completed for branch ${env.BRANCH_NAME}."
+        }
         success {
-            echo 'Pipeline completed successfully!'
+            echo "The script ran successfully on branch ${env.BRANCH_NAME}!"
         }
         failure {
-            echo 'Pipeline failed!'
+            echo "The script failed on branch ${env.BRANCH_NAME}. Check the logs for details."
         }
     }
 }
