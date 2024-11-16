@@ -6,16 +6,7 @@ pipeline {
             steps {
                 git branch: 'main', url: 'https://github.com/elshoky/jenkins-test.git'
             }
-        }
         
-        stage('Run Script') {
-            steps {
-                script {
-                    sh 'chmod +x ./hello.sh'
-                    sh './hello.sh'
-                }
-            }
-        }
 
         stage('Build Docker Image') {
             steps {
